@@ -1,6 +1,5 @@
 
 import 'package:carousel_test/redesign.dart';
-import 'package:carousel_test/testing.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 

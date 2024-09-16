@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:carousel_test/models/mydata.dart';
+import 'package:carousel_test/services/firestore_service.dart';
 
 const double strokeWidth = 2.0;
 
@@ -11,6 +13,15 @@ class Redesign extends StatefulWidget {
 }
 
 class _RedesignState extends State<Redesign> {
+  final FirestoreService _firestoreService = FirestoreService();
+  late Future<Mydata> _quoteOfTheDay;
+
+  @override
+  void initState() {
+    super.initState();
+    _quoteOfTheDay = _firestoreService.fetchQuoteOfTheDay();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,19 +37,19 @@ class _RedesignState extends State<Redesign> {
       body: Center(
         child: Container(
           decoration: BoxDecoration(
-              color: Color(0xfffcf6e8),
-              border: Border.all(
-                color: Color(0xff383933),
-                width: strokeWidth,
+            color: Color(0xfffcf6e8),
+            border: Border.all(
+              color: Color(0xff383933),
+              width: strokeWidth,
+            ),
+            borderRadius: BorderRadius.circular(8),
+            boxShadow: const [
+              BoxShadow(
+                color: Color(0xff363437),
+                offset: Offset(6, 6),
               ),
-              borderRadius: BorderRadius.circular(8),
-              boxShadow: const [
-                //bottom right shadow
-                BoxShadow(
-                  color: Color(0xff363437),
-                  offset: Offset(6, 6),
-                ),
-              ]),
+            ],
+          ),
           width: 370,
           height: 250,
           child: Column(
@@ -87,18 +98,45 @@ class _RedesignState extends State<Redesign> {
                   ],
                 ),
               ),
-              Padding(
-                padding: EdgeInsets.all(85),
-                child: Row(
-                  children: [
-                    Icon(Icons.computer),
-                    Column(
-                      children: [
-                        Text('Quote'),
-                        Text('Author')
-                      ],
-                    ),
-                  ],
+              Expanded(
+                child: Padding(
+                  padding: EdgeInsets.all(16),
+                  child: FutureBuilder<Mydata>(
+                    future: _quoteOfTheDay,
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return Center(child: CircularProgressIndicator());
+                      } else if (snapshot.hasError) {
+                        return Center(child: Text('Error: ${snapshot.error}'));
+                      } else if (snapshot.hasData) {
+                        final quoteData = snapshot.data!;
+                        return Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              quoteData.quote,
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                            SizedBox(height: 8),
+                            Text(
+                              '- ${quoteData.author}',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontStyle: FontStyle.italic,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
+                        );
+                      } else {
+                        return Center(child: Text('No quote available'));
+                      }
+                    },
+                  ),
                 ),
               ),
             ],
