@@ -89,10 +89,15 @@ class _RedesignState extends State<Redesign> {
               ),
               Padding(
                 padding: EdgeInsets.all(85),
-                child: Column(
+                child: Row(
                   children: [
-                    Text('Quote'),
-                    Text('Author')
+                    Icon(Icons.computer),
+                    Column(
+                      children: [
+                        Text('Quote'),
+                        Text('Author')
+                      ],
+                    ),
                   ],
                 ),
               ),
