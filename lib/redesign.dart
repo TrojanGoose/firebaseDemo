@@ -1,3 +1,4 @@
+import 'package:carousel_test/bookmark.dart';
 import 'package:carousel_test/models/BookmarkQuote.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -54,12 +55,30 @@ class _RedesignState extends State<Redesign> {
       backgroundColor: Color(0xffc4e7e3),
       appBar: AppBar(
         backgroundColor: Color(0xffc4e7e3),
-        elevation: 0,
-        leading: Icon(
-          Icons.menu,
-          color: Color(0xff302f2a),
-        ),
-      ),
+  title: Padding(
+    padding: EdgeInsets.symmetric(horizontal: 16),
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        IconButton(
+    icon: Icon(Icons.menu),
+    onPressed: () {},
+  ),
+  IconButton(
+    icon: Icon(Icons.bookmarks_rounded),
+    onPressed: () {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => const BookmarksPage()),
+      );
+    },
+  ),
+        //Icon(Icons.menu, color: Color(0xff302f2a),),
+        //Icon(Icons.bookmarks_rounded, color: Color(0xff302f2a),),
+      ],
+    ),
+  ),
+  automaticallyImplyLeading: false,
+),
       body: Column(
         children: [
           Expanded(
